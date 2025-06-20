@@ -7,6 +7,8 @@ urls = [
     "https://stackoverflow.com/"
 ]
 
+results = []
+
 for url in urls:
     try: 
         response = requests.get(url)
@@ -23,12 +25,27 @@ for url in urls:
         h1_tag = soup.find("h1")
         h1_text = h1_tag.get_text(strip=True) if h1_tag else "Missing"
 
-        print(f"\n{url}")
-        print(f"Status: {response.status_code}")
-        print(f"Title: {title_tag}")
-        print(f"Meta Description: {meta_description}")
-        print(f"H1: {h1_text}")
+        results.append({
+            "URL": url,
+            "Status Code": response.status_code,
+            "Title": title_tag,
+            "Meta Description": meta_description,
+            "H1": h1_text
+        })
 
     except Exception as e:
-        print(f"\n{url}")
-        print(f"ERROR: {e}")
+        results.append({
+            "URL": url,
+            "Status Code": "Error",
+            "Title": "Error",
+            "Meta description": "Error",
+            "H1": str(e)
+        })
+
+# Write results to a CSV file
+with open("seo_audit.csv", mode='w', newline='', encoding='utf-8') as file:
+    writer = csv.DictWriter(file, fieldnames=results[0].keys())
+    writer.writeheader()
+    writer.writerows(results)
+
+print("SEO audit complete: Results saved to seo_audit.csv")
