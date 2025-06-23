@@ -5,7 +5,6 @@ import csv
 urls = [
     "https://www.nomadicmatt.com/",
     "https://stackoverflow.com/",
-    "https://www.notion.so"
 ]
 
 results = []
